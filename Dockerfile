@@ -1,11 +1,21 @@
-# 使用輕量級 Nginx
-FROM nginx:alpine
+# 使用 Node.js 官方映像
+FROM node:20
 
-# 複製 Vue build 出來的 dist 到 nginx 靜態資料夾
-COPY dist /usr/share/nginx/html
+# 建立工作目錄
+WORKDIR /app
 
-# 暴露 80 端口
-EXPOSE 80
+# 複製 package.json 並安裝依賴
+COPY package*.json ./
+RUN npm install
 
-# 啟動 nginx
-CMD ["nginx", "-g", "daemon off;"]
+# 複製專案程式
+COPY . .
+
+# 編譯前端 Vue 專案
+RUN npm run build
+
+# 暴露 port（可選）
+EXPOSE 8080
+
+# 啟動 server.js
+CMD ["node", "server.js"]
