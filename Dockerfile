@@ -8,14 +8,15 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# 複製專案程式
+# 複製其餘程式碼
 COPY . .
 
-# 編譯前端 Vue 專案
+# 編譯 Vue 專案 (產生 dist 資料夾)
 RUN npm run build
 
-# 暴露 port（可選）
+# 設定環境變數 (Cloud Run 慣例)
+ENV PORT=8080
 EXPOSE 8080
 
-# 啟動 server.js
+# 啟動伺服器
 CMD ["node", "server.js"]
