@@ -19,4 +19,4 @@ ENV PORT=8080
 EXPOSE 8080
 
 # 啟動伺服器
-CMD ["node", "server.js"]
+CMD ["node", "server.cjs"]
