@@ -45,7 +45,7 @@ export default {
     const saved = localStorage.getItem('fontSize')
     if(saved) this.fontSize = parseInt(saved)
 
-    fetch('/api/OpenData/API/Rain/Get?stationNo=&loginId=open_rain&dataKey=85452C1D')
+    fetch('/rain-api')
       .then(res => res.json())
       .then(data => {
         console.log('API 回傳:', data)
