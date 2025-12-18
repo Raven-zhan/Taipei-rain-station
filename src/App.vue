@@ -1,6 +1,5 @@
 <template>
   <div class="p-4 max-w-6xl mx-auto" :style="{ fontSize: fontSize + 'px' }">
-    <!-- Header -->
     <Header 
       :search="search" 
       :fontSize="fontSize" 
@@ -8,7 +7,6 @@
       @update:fontSize="fontSize = $event"
     />
 
-    <!-- 卡片列表 / loading -->
     <main v-if="!loading" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <StationCard 
         v-for="station in filteredStations" 
@@ -34,6 +32,13 @@ export default {
       loading: true
     }
   },
+  // 新增 watch：當 fontSize 改變時，立即寫入 localStorage
+  watch: {
+    fontSize(newVal) {
+      localStorage.setItem('fontSize', newVal)
+      console.log('Saved to localStorage:', newVal)
+    }
+  },
   computed: {
     filteredStations() {
       return this.stations.filter(s => 
@@ -42,9 +47,13 @@ export default {
     }
   },
   mounted() {
+    // 1. 初始化讀取：從 localStorage 嘗試抓取舊設定
     const saved = localStorage.getItem('fontSize')
-    if(saved) this.fontSize = parseInt(saved)
+    if (saved) {
+      this.fontSize = parseInt(saved)
+    }
 
+    // 2. 抓取 API 資料
     fetch('/rain-api')
       .then(res => res.json())
       .then(data => {
@@ -58,7 +67,7 @@ export default {
         this.loading = false
       })
       .catch(err => {
-        console.error(err)
+        console.error('API Error:', err)
         this.loading = false
       })
   }
